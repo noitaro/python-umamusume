@@ -90,9 +90,13 @@ def main():
             aapo.touchPos(270, 680)
             aapo.sleep(1)
     
-        # プレゼントが届いている場合
-        elif aapo.touchImg('./umamusume/present1.png'):
-            # タップ出来たら待機
+        # ガチャボタンを見つけたら、ロビーと判断
+        elif aapo.chkImg('./umamusume/roby.png'):
+            # フォルダ名がカラの場合セット
+            if len(folderName) == 0:
+                folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            # プレゼントの位置をタップ
+            aapo.touchPos(490, 680)
             aapo.sleep(1)
             # 一括受取の位置をタップ
             aapo.touchPos(405, 890)
@@ -103,14 +107,8 @@ def main():
             # 閉じるの位置をタップ2
             aapo.touchPos(135, 890)
             aapo.sleep(1)
-
-        # プレゼントを受け取っている場合
-        elif aapo.chkImg('./umamusume/present2.png'):
-            # フォルダ名がカラの場合セット
-            if len(folderName) == 0:
-                folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # 実績ログが終わるまで10秒ほど待機（メニューボタンが隠れて押せないから）
-            aapo.sleep(13)
+            aapo.sleep(10)
             # メニューボタンの位置をタップ
             aapo.touchPos(490, 50)
             aapo.sleep(1)
