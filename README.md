@@ -19,3 +19,8 @@ NoxPlayer の画面解像度を 960×540 に設定する。
 ```
 Python umamusume.py
 ```
+
+### 複数端末に対応 2021/06/20：追記
+https://noitalog.tokyo/multi-startup/
+
+![](multi-startup.gif)
