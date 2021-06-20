@@ -4,22 +4,35 @@
 # pip install android-auto-play-opencv
 import android_auto_play_opencv as am
 import datetime
+# import inquirer  # pip install inquirer
 
 # adbpath = 'C:\\Program Files\\Nox\\bin\\'
-adbpath = 'D:\\Program Files\\Nox64\\bin\\'
+adbpath = 'C:\\Program Files\\Nox\\bin\\'
 aapo = None
+
 
 def main():
 
     global aapo
     aapo = am.AapoManager(adbpath)
-    mode = 0 # モード0(リセット)
+    mode = 0  # モード0(リセット)
     folderName = ''
     stackCount = 0
 
+    # ↓複数デバイスを同時に操作したい場合、コメントを外す。
+    # devicesselect = [
+    #     inquirer.List(
+    #         "device",
+    #         message="デバイスを選択して下さい。",
+    #         choices=aapo.adbl.devices
+    #     )
+    # ]
+    # selected = inquirer.prompt(devicesselect)
+    # aapo.adbl.setdevice(selected['device'])
+
     # スタート
     start()
-    
+
     while True:
         # 画面キャプチャ
         aapo.screencap()
@@ -28,7 +41,7 @@ def main():
         if aapo.touchImg('./umamusume/hayaokuri.png'):
             # タップ出来たら待機
             aapo.sleep(1)
-    
+
         # Google Playダイアログが出たら、キャンセルの位置をタップ
         elif aapo.chkImg('./umamusume/google-play.png'):
             aapo.touchPos(135, 630)
@@ -79,17 +92,17 @@ def main():
         elif aapo.chkImg('./umamusume/main-story.png'):
             aapo.touchPos(270, 630)
             aapo.sleep(1)
-    
+
         # ウマ娘ストーリー開放ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg('./umamusume/umamusume-story.png'):
             aapo.touchPos(270, 890)
             aapo.sleep(1)
-    
+
         # ウマ娘詳細ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg('./umamusume/umamusume-syosai.png'):
             aapo.touchPos(270, 680)
             aapo.sleep(1)
-    
+
         # ガチャボタンを見つけたら、ロビーと判断
         elif aapo.chkImg('./umamusume/roby.png'):
             # フォルダ名がカラの場合セット
@@ -151,7 +164,8 @@ def main():
             # 画面キャプチャ
             aapo.screencap()
             # スクショを保存
-            aapo.imgSave('gatya/' + folderName + '/screenshot_' + datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
+            aapo.imgSave('gatya/' + folderName + '/screenshot_' +
+                         datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
             aapo.sleep(1)
             # 閉じるの位置をタップ
             aapo.touchPos(270, 630)
@@ -162,24 +176,25 @@ def main():
             # サポートカードの位置をタップ
             # aapo.touchPos(460, 580)
             # aapo.sleep(1)
-        
+
         # 10回引く！
         elif aapo.touchImg('./umamusume/10-kaihiku.png'):
             # タップ出来たら待機
             aapo.sleep(1)
-            
+
         # ガチャを引く！
         elif aapo.touchImg('./umamusume/gatyahiku.png'):
             # タップ出来たら待機
             aapo.sleep(1)
-            
+
         # ガチャ結果
         elif aapo.chkImg('./umamusume/gatya-kekka.png'):
             # フォルダ名がカラの場合セット
             if len(folderName) == 0:
                 folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # スクショを保存
-            aapo.imgSave('gatya/' + folderName + '/screenshot_' + datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
+            aapo.imgSave('gatya/' + folderName + '/screenshot_' +
+                         datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
             aapo.sleep(1)
             # もう1回引くの位置をタップ
             aapo.touchPos(480, 890)
@@ -192,7 +207,7 @@ def main():
             # スタート
             start()
 
-            mode = 0 # モード0(リセット)
+            mode = 0  # モード0(リセット)
             folderName = ''
 
         # モードが0(リセット)の場合
@@ -214,7 +229,7 @@ def main():
                 aapo.touchPos(270, 630)
                 aapo.sleep(1)
                 # モードを1(チュートリアル)に変更
-                mode = 1 
+                mode = 1
 
         # モードが1(チュートリアル)の場合
         elif mode == 1:
@@ -237,18 +252,21 @@ def main():
                 reset()
                 # スタート
                 start()
-                
-                mode = 0 # モード0(リセット)
+
+                mode = 0  # モード0(リセット)
                 folderName = ''
                 stackCount = 0
         else:
             stackCount = 0
 
+
 def start():
     # アプリ起動
-    aapo.start('jp.co.cygames.umamusume/jp.co.cygames.umamusume_activity.UmamusumeActivity')
+    aapo.start(
+        'jp.co.cygames.umamusume/jp.co.cygames.umamusume_activity.UmamusumeActivity')
     aapo.sleep(10)
     return
+
 
 def reset():
     # ホームキーを押す
@@ -261,6 +279,7 @@ def reset():
     aapo.touchPos(700, 55)
     aapo.sleep(1)
     return
+
 
 if __name__ == '__main__':
     main()
