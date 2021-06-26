@@ -20,15 +20,15 @@ def main():
     stackCount = 0
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
-    # devicesselect = [
-    #     inquirer.List(
-    #         "device",
-    #         message="デバイスを選択して下さい。",
-    #         choices=aapo.adbl.devices
-    #     )
-    # ]
-    # selected = inquirer.prompt(devicesselect)
-    # aapo.adbl.setdevice(selected['device'])
+    #devicesselect = [
+    #    inquirer.List(
+    #        "device",
+    #        message="デバイスを選択して下さい。",
+    #        choices=aapo.adbl.devices
+    #    )
+    #]
+    #selected = inquirer.prompt(devicesselect)
+    #aapo.adbl.setdevice(selected['device'])
 
     # スタート
     start()
