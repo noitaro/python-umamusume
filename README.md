@@ -24,3 +24,7 @@ Python umamusume.py
 https://noitalog.tokyo/multi-startup/
 
 ![](multi-startup.gif)
+
+### ハーフアニバーサリーに対応 2021/08/28：DenimPauel追記
+対象ガチャを変更する場合、GET_PRETTY_DARBY_GATYA で切り替える。
+リスタート時、キャッシュをクリアする。

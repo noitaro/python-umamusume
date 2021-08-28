@@ -7,10 +7,19 @@ import datetime
 # import inquirer  # pip install inquirer
 
 # adbpath = 'C:\\Program Files\\Nox\\bin\\'
-adbpath = 'C:\\Program Files\\Nox\\bin\\'
+# adbpath = 'C:\\Program Files\\Nox\\bin\\'
+adbpath = 'C:\\Program Files (x86)\\Nox\\bin\\'
 aapo = None
+    
 
-
+#ターゲットガチャの選択
+GET_PRETTY_DARBY_GATYA = True #サポートガチャをターゲットにする場合は、Falseにする。
+if GET_PRETTY_DARBY_GATYA == True:
+    #20210828現在、無料ガチャは、プリティガチャの先なので、左から
+    GATYA_PAGE_FEED_CW     = False  #サポートガチャをページ送り方向(True:右周り)
+else:
+    GATYA_PAGE_FEED_CW     = True   #サポートガチャをページ送り方向(False:左周り)
+    
 def main():
 
     global aapo
@@ -18,6 +27,9 @@ def main():
     mode = 0  # モード0(リセット)
     folderName = ''
     stackCount = 0
+
+    robyCount  = 0        #ロビーカウンタ(変数の初期化)
+    robyStable = 5        #ロビー安定を判断する回数
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
@@ -83,28 +95,38 @@ def main():
             aapo.touchPos(405, 630)
             aapo.sleep(1)
 
-        # お知らせダイアログが出たら、閉じるの位置をタップ
+        # お知らせダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg('./umamusume/osirase.png'):
-            aapo.touchPos(270, 890)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
-        # メインストーリー開放ダイアログが出たら、閉じるの位置をタップ
+        # メインストーリー開放ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg('./umamusume/main-story.png'):
-            aapo.touchPos(270, 630)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
-        # ウマ娘ストーリー開放ダイアログが出たら、閉じるの位置をタップ
+        # ウマ娘ストーリー開放ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg('./umamusume/umamusume-story.png'):
-            aapo.touchPos(270, 890)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
-        # ウマ娘詳細ダイアログが出たら、閉じるの位置をタップ
+        # ウマ娘詳細ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg('./umamusume/umamusume-syosai.png'):
-            aapo.touchPos(270, 680)
+            aapo.touchImg('./umamusume/close.png')
+            aapo.sleep(1)
+        
+        #通信エラー時は、タイトルへを押す)
+        elif aapo.chkImg('./umamusume/communicationerror.png') :
+            aapo.touchImg('./umamusume/tothetitle.png')
             aapo.sleep(1)
 
         # ガチャボタンを見つけたら、ロビーと判断
         elif aapo.chkImg('./umamusume/roby.png'):
+            #お知らせが差し込まれる場合があるため、ロービーが安定するまで、robyStable回空ループさせる。
+            robyCount += 1
+            if robyCount < robyStable:
+                continue
+            robyCount = 0
             # フォルダ名がカラの場合セット
             if len(folderName) == 0:
                 folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
@@ -177,8 +199,8 @@ def main():
             # aapo.touchPos(460, 580)
             # aapo.sleep(1)
 
-        # 10回引く！
-        elif aapo.touchImg('./umamusume/10-kaihiku.png'):
+        # 無料ガチャボタンがあれば引く。
+        elif aapo.touchImg('./umamusume/onegatyaforfree.png'):
             # タップ出来たら待機
             aapo.sleep(1)
 
@@ -196,9 +218,13 @@ def main():
             aapo.imgSave('gatya/' + folderName + '/screenshot_' +
                          datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
             aapo.sleep(1)
+            
             # もう1回引くの位置をタップ
-            aapo.touchPos(480, 890)
-            aapo.sleep(1)
+            if aapo.touchImg('./umamusume/pickagain.png'):  #aapo.touchPos(480, 890)
+                aapo.sleep(1)
+            # または、okボタン位置をタップ（無料ガチャのケース）
+            elif aapo.touchImg('./umamusume/ok.png'):
+                aapo.sleep(1)
 
         # 購入するボタンが出たら、ガチャ終了
         elif aapo.chkImg('./umamusume/konyusuru.png'):
@@ -209,6 +235,26 @@ def main():
 
             mode = 0  # モード0(リセット)
             folderName = ''
+
+        # 左上ピンクのガチャタイトルが出たら、対象ガチャのページに移動、10連ガチャボタンを表示させる
+        elif aapo.chkImg('./umamusume/gatyaselected.png'):
+            if GET_PRETTY_DARBY_GATYA:
+                found = aapo.chkImg('./umamusume/gatyaprettydarby.png')
+            else:
+                found = aapo.chkImg('./umamusume/gatyasupportcard.png')
+            
+            if found:
+                #10回引く！
+                aapo.touchImg('./umamusume/10-kaihiku.png')
+            else:
+                #次のページへ
+                if GATYA_PAGE_FEED_CW:
+                    aapo.touchPos(460, 580)    # > 右周り
+                else:
+                    aapo.touchPos( 80, 580)    # < 左周り
+
+            aapo.sleep(1)
+            #continue
 
         # モードが0(リセット)の場合
         elif mode == 0:
@@ -243,8 +289,8 @@ def main():
                 # タップ出来たら待機
                 aapo.sleep(1)
 
-        # スタック対策
-        if aapo.chkImg('./umamusume/stack.png'):
+        # スタック対策（起動後STARTが表示されない、アンドロイド画面(アプリが落ちた場合)）
+        if aapo.chkImg('./umamusume/stack.png') or aapo.chkImg('./umamusume/umamusumegameicon.png'):
             aapo.sleep(1)
             stackCount = stackCount + 1
             if stackCount > 10:
@@ -278,6 +324,36 @@ def reset():
     # すべて消去の位置をタップ
     aapo.touchPos(700, 55)
     aapo.sleep(1)
+    
+    #ウマ娘アイコンを探して、ロングタップ、キャッシュを消す
+    aapo.screencap()
+    found, x, y = aapo.chkImg2('./umamusume/umamusumeGameIcon.png')
+    if found:
+        aapo.longTouchPos( x,y, 1000 )
+        aapo.sleep(1)
+
+        # プロパティ表示
+        aapo.screencap()
+        aapo.touchImg('./umamusume/appproperty.png')
+        aapo.sleep(1)
+        
+        # ストレージ表示
+        aapo.screencap()
+        aapo.touchImg('./umamusume/calculatingstorage.png')
+        aapo.sleep(1)
+        
+        # キャッシュを削除
+        aapo.screencap()
+        aapo.touchImg('./umamusume/clearcache.png')
+        aapo.sleep(1)
+
+        # タスクキーを押す
+        aapo.inputkeyevent(187)
+        aapo.sleep(1)
+        # すべて消去の位置をタップ
+        aapo.touchPos(700, 55)
+        aapo.sleep(1)
+
     return
 
 
