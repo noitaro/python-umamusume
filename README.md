@@ -28,3 +28,6 @@ https://noitalog.tokyo/multi-startup/
 ### ハーフアニバーサリーに対応 2021/08/28：DenimPauel追記
 対象ガチャを変更する場合、GET_PRETTY_DARBY_GATYA で切り替える。
 リスタート時、キャッシュをクリアする。
+
+### ハーフアニバーサリーに対応 2021/08/29：DenimPauel追記
+ハーフアニバーサリープレゼント服に対応。
