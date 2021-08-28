@@ -6,13 +6,14 @@ import android_auto_play_opencv as am
 import datetime
 # import inquirer  # pip install inquirer
 
-adbpath = 'C:\\Program Files\\Nox\\bin\\'
-#adbpath = 'C:\\Program Files (x86)\\Nox\\bin\\'
+#adbpath = 'C:\\Program Files\\Nox\\bin\\'
+adbpath = 'C:\\Program Files (x86)\\Nox\\bin\\'
 aapo = None
     
 
 #ターゲットガチャの選択
 GET_PRETTY_DARBY_GATYA = True #サポートガチャをターゲットにする場合は、Falseにする。
+
 if GET_PRETTY_DARBY_GATYA == True:
     #20210828現在、無料ガチャは、プリティガチャの先なので、左から
     GATYA_PAGE_FEED_CW     = False  #サポートガチャをページ送り方向(True:右周り)
@@ -28,7 +29,7 @@ def main():
     stackCount = 0
 
     robyCount  = 0        #ロビーカウンタ(変数の初期化)
-    robyStable = 8        #ロビー安定を判断する回数
+    robyStable = 5        #ロビー安定を判断する回数
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
@@ -129,6 +130,7 @@ def main():
             #お知らせが差し込まれる場合があるため、ロービーが安定するまで、robyStable回空ループさせる。
             robyCount += 1
             if robyCount < robyStable:
+                aapo.sleep(1)   #小休止を入れる
                 continue
             robyCount = 0
             # フォルダ名がカラの場合セット
