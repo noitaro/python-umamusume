@@ -6,9 +6,8 @@ import android_auto_play_opencv as am
 import datetime
 # import inquirer  # pip install inquirer
 
-# adbpath = 'C:\\Program Files\\Nox\\bin\\'
-# adbpath = 'C:\\Program Files\\Nox\\bin\\'
-adbpath = 'C:\\Program Files (x86)\\Nox\\bin\\'
+adbpath = 'C:\\Program Files\\Nox\\bin\\'
+#adbpath = 'C:\\Program Files (x86)\\Nox\\bin\\'
 aapo = None
     
 
@@ -29,7 +28,7 @@ def main():
     stackCount = 0
 
     robyCount  = 0        #ロビーカウンタ(変数の初期化)
-    robyStable = 5        #ロビー安定を判断する回数
+    robyStable = 8        #ロビー安定を判断する回数
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
@@ -114,7 +113,12 @@ def main():
         elif aapo.chkImg('./umamusume/umamusume-syosai.png'):
             aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
-        
+
+        #衣装獲得、プレゼント
+        elif aapo.chkImg('./umamusume/gotClothes.png') or aapo.chkImg('./umamusume/present.png'):
+            aapo.touchImg('./umamusume/close.png')
+            aapo.sleep(1)
+
         #通信エラー時は、タイトルへを押す)
         elif aapo.chkImg('./umamusume/communicationerror.png') :
             aapo.touchImg('./umamusume/tothetitle.png')
