@@ -20,18 +20,33 @@ NoxPlayer の画面解像度を 960×540 に設定する。
 Python umamusume.py
 ```
 
-### 複数端末に対応 2021/06/20：追記
-https://noitalog.tokyo/multi-startup/
-
-![](multi-startup.gif)
+### ハーフアニバーサリーに対応 2021/08/29：[@DenimPauel氏](https://github.com/DenimPauel)追記
+ハーフアニバーサリープレゼント服に対応。
 
 ### ハーフアニバーサリーに対応 2021/08/28：[@DenimPauel氏](https://github.com/DenimPauel)追記
 対象ガチャを変更する場合、GET_PRETTY_DARBY_GATYA で切り替える。
-```
+```Python
 # ターゲットガチャの選択
 GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにする場合は、Falseにする。
 ```
 リスタート時、キャッシュをクリアする。
 
-### ハーフアニバーサリーに対応 2021/08/29：[@DenimPauel氏](https://github.com/DenimPauel)追記
-ハーフアニバーサリープレゼント服に対応。
+### 複数端末に対応 2021/06/20：追記
+https://noitalog.tokyo/multi-startup/
+
+![](multi-startup.gif)
+```Python
+# ↓複数デバイスを同時に操作したい場合、コメントを外す。
+import inquirer  # pip install inquirer
+
+# ↓複数デバイスを同時に操作したい場合、コメントを外す。
+devicesselect = [
+    inquirer.List(
+        "device",
+        message="デバイスを選択して下さい。",
+        choices=aapo.adbl.devices
+    )
+]
+selected = inquirer.prompt(devicesselect)
+aapo.adbl.setdevice(selected['device'])
+```
