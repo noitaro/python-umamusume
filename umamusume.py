@@ -7,7 +7,7 @@ import datetime
 # import inquirer  # pip install inquirer
 
 # adbpath = 'C:\\Program Files\\Nox\\bin\\'
-adbpath = 'C:\\Program Files\\Nox\\bin\\'
+adbpath = 'C:\\Program Files (x86)\\Nox64\\bin\\'
 aapo = None
 
 
@@ -18,6 +18,7 @@ def main():
     mode = 0  # モード0(リセット)
     folderName = ''
     stackCount = 0
+    present_ok = False
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
@@ -44,17 +45,17 @@ def main():
 
         # Google Playダイアログが出たら、キャンセルの位置をタップ
         elif aapo.chkImg('./umamusume/google-play.png'):
-            aapo.touchPos(135, 630)
+            aapo.touchImg('./umamusume/cancel.png')
             aapo.sleep(1)
 
         # アカウント連携ダイアログが出たら、後でするの位置をタップ
         elif aapo.chkImg('./umamusume/account.png'):
-            aapo.touchPos(135, 630)
+            aapo.touchImg('./umamusume/atode.png')
             aapo.sleep(1)
 
         # チュートリアルダイアログが出たら、スキップの位置をタップ
         elif aapo.chkImg('./umamusume/tutorial.png'):
-            aapo.touchPos(270, 630)
+            aapo.touchImg('./umamusume/skip.png')
             aapo.sleep(1)
 
         # トレーナー登録ダイアログが出たら、
@@ -80,46 +81,58 @@ def main():
 
         # データダウンロードダイアログが出たら、OKの位置をタップ
         elif aapo.chkImg('./umamusume/datadownload.png'):
-            aapo.touchPos(405, 630)
+            aapo.touchImg('./umamusume/ok.png')
             aapo.sleep(1)
 
         # お知らせダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg('./umamusume/osirase.png'):
-            aapo.touchPos(270, 890)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
         # メインストーリー開放ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg('./umamusume/main-story.png'):
-            aapo.touchPos(270, 630)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
         # ウマ娘ストーリー開放ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg('./umamusume/umamusume-story.png'):
-            aapo.touchPos(270, 890)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
         # ウマ娘詳細ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg('./umamusume/umamusume-syosai.png'):
-            aapo.touchPos(270, 680)
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
-        # ガチャボタンを見つけたら、ロビーと判断
-        elif aapo.chkImg('./umamusume/roby.png'):
-            # フォルダ名がカラの場合セット
-            if len(folderName) == 0:
-                folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+        # 受取完了ダイアログが出たら、閉じるの位置をタップ
+        elif aapo.chkImg('./umamusume/uketorikanryo.png'):
+            aapo.touchImg('./umamusume/close.png')
+            aapo.sleep(1)
+
+        # 衣装獲得ダイアログが出たら、閉じるの位置をタップ
+        elif aapo.chkImg('./umamusume/isyoget.png'):
+            aapo.touchImg('./umamusume/close.png')
+            aapo.sleep(1)
+
+        # ガチャボタンを見つけたら、ロビーと判断し、プレゼントを受け取っていない場合、
+        elif aapo.chkImg('./umamusume/roby.png') and present_ok == False:
             # プレゼントの位置をタップ
             aapo.touchPos(490, 680)
             aapo.sleep(1)
-            # 一括受取の位置をタップ
-            aapo.touchPos(405, 890)
+
+        # プレゼントダイアログが出たら、一括受取の位置をタップ
+        elif aapo.chkImg('./umamusume/present.png') and present_ok == False:
+            aapo.touchImg('./umamusume/ikkatuuketori1.png')
+            present_ok = True
             aapo.sleep(1)
-            # 閉じるの位置をタップ1
-            aapo.touchPos(270, 890)
+
+        # プレゼントを受け取った後で一括受取が押せなくなったら、閉じるの位置をタップ
+        elif aapo.chkImg('./umamusume/ikkatuuketori2.png') and present_ok == True:
+            aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
-            # 閉じるの位置をタップ2
-            aapo.touchPos(135, 890)
-            aapo.sleep(1)
+
+        # ガチャボタンを見つけたら、ロビーと判断し、プレゼントを受け取った後、
+        elif aapo.chkImg('./umamusume/roby.png') and present_ok == True:
             # 実績ログが終わるまで10秒ほど待機（メニューボタンが隠れて押せないから）
             aapo.sleep(10)
             # メニューボタンの位置をタップ
@@ -163,6 +176,9 @@ def main():
             aapo.sleep(1)
             # 画面キャプチャ
             aapo.screencap()
+            # フォルダ名がカラの場合セット
+            if len(folderName) == 0:
+                folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # スクショを保存
             aapo.imgSave('gatya/' + folderName + '/screenshot_' +
                          datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
@@ -176,6 +192,11 @@ def main():
             # サポートカードの位置をタップ
             # aapo.touchPos(460, 580)
             # aapo.sleep(1)
+
+        # 有償ガチャを見つけたら、右のガチャに変更
+        elif aapo.chkImg('./umamusume/yusyogatya.png'):
+            aapo.touchPos(460, 580)
+            aapo.sleep(1)
 
         # 10回引く！
         elif aapo.touchImg('./umamusume/10-kaihiku.png'):
@@ -209,6 +230,7 @@ def main():
 
             mode = 0  # モード0(リセット)
             folderName = ''
+            present_ok = False
 
         # モードが0(リセット)の場合
         elif mode == 0:
@@ -256,6 +278,7 @@ def main():
                 mode = 0  # モード0(リセット)
                 folderName = ''
                 stackCount = 0
+                present_ok = False
         else:
             stackCount = 0
 
