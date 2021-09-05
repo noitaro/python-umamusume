@@ -249,6 +249,7 @@ def main():
 
             mode = 0  # モード0(リセット)
             folderName = ''
+            stackCount = 0
             robyCount  = 0
             present_ok = False
 
