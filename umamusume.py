@@ -4,20 +4,21 @@
 # pip install android-auto-play-opencv
 import android_auto_play_opencv as am
 import datetime
-# import inquirer  # pip install inquirer
+#import inquirer  # pip install inquirer
 
-# adbpath = 'C:\\Program Files\\Nox\\bin\\'
-adbpath = 'C:\\Program Files (x86)\\Nox64\\bin\\'
+# adbpath = 'C:\\Program Files (x86)\\Nox64\\bin\\'
+adbpath = 'C:\\Program Files\\Nox\\bin\\'
 aapo = None
 
 # ターゲットガチャの選択
-GET_PRETTY_DARBY_GATYA = True # サポートガチャをターゲットにする場合は、Falseにする。
+GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにする場合は、Falseにする。
 
 if GET_PRETTY_DARBY_GATYA == True:
     # 20210828現在、無料ガチャは、プリティガチャの先なので、左から
-    GATYA_PAGE_FEED_CW     = False  # サポートガチャをページ送り方向(True:右周り)
+    GATYA_PAGE_FEED_CW = False  # サポートガチャをページ送り方向(True:右周り)
 else:
-    GATYA_PAGE_FEED_CW     = True   # サポートガチャをページ送り方向(False:左周り)
+    GATYA_PAGE_FEED_CW = True  # サポートガチャをページ送り方向(False:左周り)
+
 
 def main():
 
@@ -28,8 +29,8 @@ def main():
     stackCount = 0
     present_ok = False
 
-    robyCount  = 0        # ロビーカウンタ(変数の初期化)
-    robyStable = 5        # ロビー安定を判断する回数
+    robyCount = 0  # ロビーカウンタ(変数の初期化)
+    robyStable = 5  # ロビー安定を判断する回数
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
@@ -143,21 +144,30 @@ def main():
 
         # ガチャボタンを見つけたら、ロビーと判断し、プレゼントを受け取っていない場合、
         elif aapo.chkImg('./umamusume/roby.png') and present_ok == False:
-        
+
             # お知らせが差し込まれる場合があるため、ロービーが安定するまで、robyStable回空ループさせる。
             robyCount += 1
             if robyCount < robyStable:
-                aapo.sleep(1) # 小休止を入れる
+                aapo.sleep(1)  # 小休止を入れる
                 continue
-            
+            else:
+                robyCount = 0
+
             # プレゼントの位置をタップ
             aapo.touchPos(490, 680)
             aapo.sleep(1)
 
         # ガチャボタンを見つけたら、ロビーと判断し、プレゼントを受け取った後、
         elif aapo.chkImg('./umamusume/roby.png') and present_ok == True:
-            # 実績ログが終わるまで10秒ほど待機（メニューボタンが隠れて押せないから）
-            aapo.sleep(10)
+
+            # 実績ログが終わるまで待機（メニューボタンが隠れて押せないから）
+            robyCount += 1
+            if robyCount < robyStable:
+                aapo.sleep(1)  # 小休止を入れる
+                continue
+            else:
+                robyCount = 0
+
             # メニューボタンの位置をタップ
             aapo.touchPos(490, 50)
             aapo.sleep(1)
@@ -250,7 +260,7 @@ def main():
             mode = 0  # モード0(リセット)
             folderName = ''
             stackCount = 0
-            robyCount  = 0
+            robyCount = 0
             present_ok = False
 
         # 左上ピンクのガチャタイトルが出たら、対象ガチャのページに移動、10連ガチャボタンを表示させる
@@ -259,7 +269,7 @@ def main():
                 found = aapo.chkImg('./umamusume/gatyaprettydarby.png')
             else:
                 found = aapo.chkImg('./umamusume/gatyasupportcard.png')
-            
+
             if found:
                 # 10回引く！
                 aapo.touchImg('./umamusume/10-kaihiku.png')
@@ -268,7 +278,7 @@ def main():
                 if GATYA_PAGE_FEED_CW:
                     aapo.touchPos(460, 580)    # > 右周り
                 else:
-                    aapo.touchPos( 80, 580)    # < 左周り
+                    aapo.touchPos(80, 580)    # < 左周り
 
             aapo.sleep(1)
 
@@ -305,7 +315,7 @@ def main():
                 # タップ出来たら待機
                 aapo.sleep(1)
 
-        # スタック対策（起動後STARTが表示されない、アンドロイド画面(アプリが落ちた場合)）
+        # スタック対策 起動後STARTが表示されない、アンドロイド画面(アプリが落ちた場合)
         if aapo.chkImg('./umamusume/stack.png') or aapo.chkImg('./umamusume/umamusumegameicon.png'):
             aapo.sleep(1)
             stackCount = stackCount + 1
@@ -318,7 +328,7 @@ def main():
                 mode = 0  # モード0(リセット)
                 folderName = ''
                 stackCount = 0
-                robyCount  = 0
+                robyCount = 0
                 present_ok = False
         else:
             stackCount = 0
@@ -354,12 +364,12 @@ def reset():
         aapo.screencap()
         aapo.touchImg('./umamusume/appproperty.png')
         aapo.sleep(1)
-        
+
         # ストレージ表示
         aapo.screencap()
         aapo.touchImg('./umamusume/calculatingstorage.png')
         aapo.sleep(1)
-        
+
         # キャッシュを削除
         aapo.screencap()
         aapo.touchImg('./umamusume/clearcache.png')
