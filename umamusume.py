@@ -6,8 +6,13 @@ import android_auto_play_opencv as am
 import datetime
 #import inquirer  # pip install inquirer
 
-# adbpath = 'C:\\Program Files (x86)\\Nox64\\bin\\'
-adbpath = 'C:\\Program Files\\Nox\\bin\\'
+import os
+adbpathCandidates = [
+    'C:\\Program Files\\Nox\\bin\\',
+    'C:\\Program Files (x86)\\Nox64\\bin\\',
+    'C:\\Program Files (x86)\\Nox\\bin\\'
+]
+
 aapo = None
 
 # ターゲットガチャの選択
@@ -23,6 +28,10 @@ else:
 def main():
 
     global aapo
+    for i in range(len(adbpathCandidates)):
+        if( os.path.exists(adbpathCandidates[i]) == True ):
+            adbpath=adbpathCandidates[i]
+            break
     aapo = am.AapoManager(adbpath)
     mode = 0  # モード0(リセット)
     folderName = ''
@@ -119,6 +128,11 @@ def main():
         # ウマ娘詳細ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg('./umamusume/umamusume-syosai.png'):
             aapo.touchImg('./umamusume/close.png')
+            aapo.sleep(1)
+
+        # 日付が変わりましたが表示されたら、
+        elif aapo.chkImg('./umamusume/newday.png'):
+            aapo.touchImg('./umamusume/OK.png')
             aapo.sleep(1)
 
         # 受取完了ダイアログが出たら、閉じるの位置をタップ
@@ -239,6 +253,7 @@ def main():
             if len(folderName) == 0:
                 folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # スクショを保存
+            aapo.screencap()    #スクリーンリフレッシュ（写真が取れない場合がある。ボタン押下時のタイマーよりここのほうが確実な気がする。)
             aapo.imgSave('gatya/' + folderName + '/screenshot_' +
                          datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
             aapo.sleep(1)
