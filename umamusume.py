@@ -2,18 +2,17 @@
 # 解像度 960x540 で作ってあるので、実行前にNoxの解像度を変更して下さい。
 
 # pip install android-auto-play-opencv
-import android_auto_play_opencv as am
+from android_auto_play_opencv import AapoManager
 import datetime
 #import inquirer  # pip install inquirer
 
 import os
+
 adbpathCandidates = [
     'C:\\Program Files\\Nox\\bin\\',
     'C:\\Program Files (x86)\\Nox64\\bin\\',
     'C:\\Program Files (x86)\\Nox\\bin\\'
 ]
-
-aapo = None
 
 # ターゲットガチャの選択
 GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにする場合は、Falseにする。
@@ -24,30 +23,39 @@ if GET_PRETTY_DARBY_GATYA == True:
 else:
     GATYA_PAGE_FEED_CW = True  # サポートガチャをページ送り方向(False:左周り)
 
+ROBY_STABLE = 5  # ロビー安定を判断する回数
 
+aapo: AapoManager = None
+
+print('終わらせたい時はCtrl+C')
 def main():
 
     global aapo
+    adbpath: str = None
     for i in range(len(adbpathCandidates)):
-        if( os.path.exists(adbpathCandidates[i]) == True ):
-            adbpath=adbpathCandidates[i]
+        if(os.path.exists(adbpathCandidates[i]) == True):
+            adbpath = adbpathCandidates[i]
             break
-    aapo = am.AapoManager(adbpath)
-    mode = 0  # モード0(リセット)
-    folderName = ''
-    stackCount = 0
-    present_ok = False
 
-    robyCount = 0  # ロビーカウンタ(変数の初期化)
-    robyStable = 5  # ロビー安定を判断する回数
+    if adbpath is None:
+        print('adb.exe が見つからないため、終了します。')
+        return
+
+    aapo = AapoManager(adbpath)
+    mode: int = 0  # モード0(リセット)
+    folderName: str = ''
+    stackCount: int = 0
+    present_ok: bool = False
+
+    robyCount: int = 0  # ロビーカウンタ(変数の初期化)
 
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
-    #    inquirer.List(
-    #        "device",
-    #        message="デバイスを選択して下さい。",
-    #        choices=aapo.adbl.devices
-    #    )
+    #   inquirer.List(
+    #       "device",
+    #       message="デバイスを選択して下さい。",
+    #       choices=aapo.adbl.devices
+    #   )
     #]
     #selected = inquirer.prompt(devicesselect)
     #aapo.adbl.setdevice(selected['device'])
@@ -130,6 +138,11 @@ def main():
             aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
+        # 楽曲獲得ダイアログが出たら、閉じるボタンをタップ
+        elif aapo.chkImg('./umamusume/gakkyoku.png'):
+            aapo.touchImg('./umamusume/close.png')
+            aapo.sleep(1)
+
         # 日付が変わりましたが表示されたら、
         elif aapo.chkImg('./umamusume/newday.png'):
             aapo.touchImg('./umamusume/OK.png')
@@ -146,22 +159,23 @@ def main():
             aapo.sleep(1)
 
         # プレゼントダイアログが出たら、一括受取の位置をタップ
-        elif aapo.chkImg('./umamusume/present.png') and present_ok == False:
+        elif present_ok == False and aapo.chkImg('./umamusume/present.png'):
             aapo.touchImg('./umamusume/ikkatuuketori1.png')
             present_ok = True
             aapo.sleep(1)
 
         # プレゼントを受け取った後で一括受取が押せなくなったら、閉じるの位置をタップ
-        elif aapo.chkImg('./umamusume/ikkatuuketori2.png') and present_ok == True:
+        elif present_ok == True and aapo.chkImg('./umamusume/ikkatuuketori2.png'):
             aapo.touchImg('./umamusume/close.png')
             aapo.sleep(1)
 
         # ガチャボタンを見つけたら、ロビーと判断し、プレゼントを受け取っていない場合、
-        elif aapo.chkImg('./umamusume/roby.png') and present_ok == False:
+        elif present_ok == False and aapo.chkImg('./umamusume/roby.png'):
 
-            # お知らせが差し込まれる場合があるため、ロービーが安定するまで、robyStable回空ループさせる。
+            # お知らせが差し込まれる場合があるため、ロビーが安定するまで、robyStable回空ループさせる。
             robyCount += 1
-            if robyCount < robyStable:
+            if robyCount < ROBY_STABLE:
+                print(f'ロビー待機: {robyCount}')
                 aapo.sleep(1)  # 小休止を入れる
                 continue
             else:
@@ -172,11 +186,12 @@ def main():
             aapo.sleep(1)
 
         # ガチャボタンを見つけたら、ロビーと判断し、プレゼントを受け取った後、
-        elif aapo.chkImg('./umamusume/roby.png') and present_ok == True:
+        elif present_ok == True and aapo.chkImg('./umamusume/roby.png'):
 
             # 実績ログが終わるまで待機（メニューボタンが隠れて押せないから）
             robyCount += 1
-            if robyCount < robyStable:
+            if robyCount < ROBY_STABLE:
+                print(f'ロビー待機: {robyCount}')
                 aapo.sleep(1)  # 小休止を入れる
                 continue
             else:
@@ -253,7 +268,7 @@ def main():
             if len(folderName) == 0:
                 folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             # スクショを保存
-            aapo.screencap()    #スクリーンリフレッシュ（写真が取れない場合がある。ボタン押下時のタイマーよりここのほうが確実な気がする。)
+            aapo.screencap()  # スクリーンリフレッシュ（写真が取れない場合がある。ボタン押下時のタイマーよりここのほうが確実な気がする。)
             aapo.imgSave('gatya/' + folderName + '/screenshot_' +
                          datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
             aapo.sleep(1)
@@ -332,6 +347,7 @@ def main():
 
         # スタック対策 起動後STARTが表示されない、アンドロイド画面(アプリが落ちた場合)
         if aapo.chkImg('./umamusume/stack.png') or aapo.chkImg('./umamusume/umamusumegameicon.png'):
+            print(f'スタック: {stackCount}')
             aapo.sleep(1)
             stackCount = stackCount + 1
             if stackCount > 10:
@@ -399,6 +415,9 @@ def reset():
 
     return
 
-
+# メイン関数を実行(Ctrl+Cで終了)
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
