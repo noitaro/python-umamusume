@@ -20,14 +20,17 @@ NoxPlayer の画面解像度を 960×540 に設定する。
 Python umamusume.py
 ```
 
-### 日付をまたいだ時・他に対応 2021/11/21：追記
+### 修正履歴
+#### 楽曲取得に対応 2021/12/8
+
+#### 日付をまたいだ時・他に対応 2021/11/21：追記
 日付をまたいだ時に、OKボタンを押して作業を継続できるようにする。
 ガチャ結果画像に、全員映らない場合があるので、直前でスクリーンキャプチャを再実施する。
 
-### ハーフアニバーサリーに対応 2021/08/29：[@DenimPauel氏](https://github.com/DenimPauel)追記
+#### ハーフアニバーサリーに対応 2021/08/29：[@DenimPauel氏](https://github.com/DenimPauel)追記
 ハーフアニバーサリープレゼント服に対応。
 
-### ハーフアニバーサリーに対応 2021/08/28：[@DenimPauel氏](https://github.com/DenimPauel)追記
+#### ハーフアニバーサリーに対応 2021/08/28：[@DenimPauel氏](https://github.com/DenimPauel)追記
 対象ガチャを変更する場合、GET_PRETTY_DARBY_GATYA で切り替える。
 ```Python
 # ターゲットガチャの選択
