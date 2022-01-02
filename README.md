@@ -21,26 +21,21 @@ Python umamusume.py
 ```
 
 ### 修正履歴
-#### 2021年末～2022年始のイベント対応 2022/01/01
++ 2022/01/01 2021年末～2022年始のイベント対応 : [@DenimPauel氏](https://github.com/DenimPauel)
++ 2021/12/8 楽曲取得に対応 : [@DenimPauel氏](https://github.com/DenimPauel)
++ 2021/11/21 日付をまたいだリセマラに対応 : [@DenimPauel氏](https://github.com/DenimPauel)
++ 2021/08/28 ハーフアニバーサリーに対応 : [@DenimPauel氏](https://github.com/DenimPauel)
++ 2021/06/20 複数端末に対応
 
-#### 楽曲取得に対応 2021/12/8
 
-#### 日付をまたいだ時・他に対応 2021/11/21：追記
-日付をまたいだ時に、OKボタンを押して作業を継続できるようにする。
-ガチャ結果画像に、全員映らない場合があるので、直前でスクリーンキャプチャを再実施する。
-
-#### ハーフアニバーサリーに対応 2021/08/29：[@DenimPauel氏](https://github.com/DenimPauel)追記
-ハーフアニバーサリープレゼント服に対応。
-
-#### ハーフアニバーサリーに対応 2021/08/28：[@DenimPauel氏](https://github.com/DenimPauel)追記
-対象ガチャを変更する場合、GET_PRETTY_DARBY_GATYA で切り替える。
+### 対象ガチャ変更手順
+GET_PRETTY_DARBY_GATYA で切り替える。
 ```Python
 # ターゲットガチャの選択
 GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにする場合は、Falseにする。
 ```
-リスタート時、キャッシュをクリアする。
 
-### 複数端末に対応 2021/06/20：追記
+### 複数端末リセマラ手順
 https://noitalog.tokyo/multi-startup/
 
 ![](multi-startup.gif)
