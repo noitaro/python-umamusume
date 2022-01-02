@@ -15,13 +15,8 @@ adbpathCandidates = [
 ]
 
 # ターゲットガチャの選択
-GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにする場合は、Falseにする。
-
-if GET_PRETTY_DARBY_GATYA == True:
-    # 20210828現在、無料ガチャは、プリティガチャの先なので、左から
-    GATYA_PAGE_FEED_CW = False  # サポートガチャをページ送り方向(True:右周り)
-else:
-    GATYA_PAGE_FEED_CW = True  # サポートガチャをページ送り方向(False:左周り)
+# GET_PRETTY_DARBY_GATYAの利用は廃止、isMainTargetPrettyDarby を使う
+GATYA_PAGE_FEED_CW		= True  # 2022年10連ガチャx10対応:時計回りが吉。ダービー(ジュエル消費)=>サポートガチャ(フリー)で回る
 
 ROBY_STABLE = 5  # ロビー安定を判断する回数
 
@@ -52,6 +47,11 @@ def main():
 
     robyCount: int = 0  # ロビーカウンタ(変数の初期化)
 
+	# 2022年10連ガチャx10対応
+    gotThem = 0
+    GATYA_INIT_SETTING_IS_PRETTYDARBY = True
+    isMainTargetPrettyDarby = GATYA_INIT_SETTING_IS_PRETTYDARBY
+    
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
     #   inquirer.List(
@@ -161,6 +161,11 @@ def main():
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
+        # ガチャストック通知が出たら、閉じるの位置をタップ
+        elif aapo.chkImg(file_path +'/umamusume/gatyaStockNotification.png'):
+            aapo.touchImg(file_path +'/umamusume/close.png')
+            aapo.sleep(1)
+            
         # プレゼントダイアログが出たら、一括受取の位置をタップ
         elif present_ok == False and aapo.chkImg(file_path +'/umamusume/present.png'):
             aapo.touchImg(file_path +'/umamusume/ikkatuuketori1.png')
@@ -285,6 +290,20 @@ def main():
 
         # 購入するボタンが出たら、ガチャ終了
         elif aapo.chkImg(file_path +'/umamusume/konyusuru.png'):
+
+			# 2022年10連ガチャx10対応
+            gotThem += 1
+            if gotThem < 2:
+                isMainTargetPrettyDarby = not bool(isMainTargetPrettyDarby)
+                aapo.touchImg(file_path +'/umamusume/cancel.png')
+                aapo.sleep(1)
+                aapo.touchPos(150, 900) #戻るボタンの座標を押す
+                aapo.sleep(1)
+                continue
+            #終了処理
+            gotThem = 0
+            isMainTargetPrettyDarby = GATYA_INIT_SETTING_IS_PRETTYDARBY
+
             # リセット
             reset()
             # スタート
@@ -298,7 +317,7 @@ def main():
 
         # 左上ピンクのガチャタイトルが出たら、対象ガチャのページに移動、10連ガチャボタンを表示させる
         elif aapo.chkImg(file_path +'/umamusume/gatyaselected.png'):
-            if GET_PRETTY_DARBY_GATYA:
+            if isMainTargetPrettyDarby:	# 2022年10連ガチャx10対応 GET_PRETTY_DARBY_GATYAの利用は廃止
                 found = aapo.chkImg(file_path +'/umamusume/gatyaprettydarby.png')
             else:
                 found = aapo.chkImg(file_path +'/umamusume/gatyasupportcard.png')
