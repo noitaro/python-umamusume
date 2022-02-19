@@ -11,7 +11,8 @@ import os
 adbpathCandidates = [
     'C:\\Program Files\\Nox\\bin\\',
     'C:\\Program Files (x86)\\Nox64\\bin\\',
-    'C:\\Program Files (x86)\\Nox\\bin\\'
+    'C:\\Program Files (x86)\\Nox\\bin\\',
+    'D:\\Program Files\\Nox\\bin\\'
 ]
 
 # ターゲットガチャの選択
@@ -22,8 +23,11 @@ ROBY_STABLE = 5  # ロビー安定を判断する回数
 
 aapo: AapoManager = None
 
-# カレントフォルダ取得
-file_path = os.path.dirname(__file__)
+# 実行フォルダ取得
+file_path: str = os.path.dirname(__file__)
+# 実行フォルダが取得できない場合、カレントフォルダを指定
+if file_path == '':
+    file_path = '.'
 
 print('終わらせたい時はCtrl+C')
 def main():
