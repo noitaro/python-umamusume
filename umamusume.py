@@ -412,7 +412,7 @@ def reset():
 
     # ウマ娘アイコンを探して、ロングタップ、キャッシュを消す
     aapo.screencap()
-    found, x, y = aapo.chkImg2(file_path +'/umamusume/umamusumeGameIcon.png')
+    found, x, y = aapo.chkImg2(file_path +'/umamusume/umamusumegameicon.png')
     if found:
         aapo.longTouchPos(x, y, 1000)
         aapo.sleep(1)
