@@ -21,6 +21,8 @@ GATYA_PAGE_FEED_CW		= True  # 2022年10連ガチャx10対応:時計回りが吉�
 
 ROBY_STABLE = 5  # ロビー安定を判断する回数
 
+SLEEP_IF_UPDATE_IS_REQUIRED = False #ウマ娘アプリ更新要求時の動作。 False:本pythonコードを終了 / True: PCをスリープ
+
 aapo: AapoManager = None
 
 # 実行フォルダ取得
@@ -34,9 +36,9 @@ def main():
 
     global aapo
     adbpath: str = None
-    for i in range(len(adbpathCandidates)):
-        if(os.path.exists(adbpathCandidates[i]) == True):
-            adbpath = adbpathCandidates[i]
+    for p in adbpathCandidates:
+        if(os.path.exists(p) == True):
+            adbpath = p
             break
 
     if adbpath is None:
@@ -73,6 +75,13 @@ def main():
     while True:
         # 画面キャプチャ
         aapo.screencap()
+        # フラグ「takePicture.do」を置くと1枚だけスクリーンショットを撮る。(調査用途)
+        try:
+            os.rename( file_path+'/takePicture.do', file_path+'/takePicture.done' )
+        except Exception as e:
+            pass    #print(e)
+        else:
+            aapo.imgSave('gatya/picForInvestigation_' + datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
 
         # 早送りボタンは常にタップ
         if aapo.touchImg(file_path +'/umamusume/hayaokuri.png'):
@@ -337,6 +346,18 @@ def main():
                     aapo.touchPos(80, 580)    # < 左周り
 
             aapo.sleep(1)
+        
+        #アプリ更新が表示されたら、PCをスリープさせる。
+        elif aapo.chkImg(file_path +'/umamusume/appRequiresUpdate.png'):
+            print('アプリ更新検出。終了')
+            #終了の記録を残す。
+            aapo.imgSave('gatya/endReason_' + datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
+            if SLEEP_IF_UPDATE_IS_REQUIRED:
+                aapo.sleep(60) 
+                import ctypes
+                ctypes.windll.PowrProf.SetSuspendState(0, 1, 0)
+                #Wakeup後・・・umamusume.pyを終了
+            exit()
 
         # モードが0(リセット)の場合
         elif mode == 0:
