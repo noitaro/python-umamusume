@@ -21,6 +21,7 @@ Python umamusume.py
 ```
 
 ### 修正履歴
++ 2022/10/24 おさんぽチュートリアルに対応
 + 2022/01/01 2021年末～2022年始のイベント対応 : [@DenimPauel氏](https://github.com/DenimPauel)
 + 2021/12/8 楽曲取得に対応 : [@DenimPauel氏](https://github.com/DenimPauel)
 + 2021/11/21 日付をまたいだリセマラに対応 : [@DenimPauel氏](https://github.com/DenimPauel)
