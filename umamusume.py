@@ -130,6 +130,28 @@ def main():
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
+        # おさんぽチュートリアルが出たら、次へボタンをタップ
+        elif aapo.chkImg(file_path +'/umamusume/osanpo.png'):
+            # 次へボタンの位置を3回タップ
+            aapo.touchPos(270, 900)
+            aapo.sleep(1)
+            aapo.touchPos(270, 900)
+            aapo.sleep(1)
+            aapo.touchPos(270, 900)
+            aapo.sleep(1)
+
+        # 外部リンク確認
+        elif aapo.chkImg(file_path +'/umamusume/gaibulink.png'):
+            # キャンセルボタンをタップ
+            aapo.touchImg(file_path +'/umamusume/cancel.png')
+            aapo.sleep(1)
+
+        # 交換確認
+        elif aapo.chkImg(file_path +'/umamusume/koukankakunin.png'):
+            # 閉じるボタンをタップ
+            aapo.touchImg(file_path +'/umamusume/close.png')
+            aapo.sleep(1)
+
         # メインストーリー開放ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/main-story.png'):
             aapo.touchImg(file_path +'/umamusume/close.png')
