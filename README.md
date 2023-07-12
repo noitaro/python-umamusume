@@ -2,7 +2,7 @@
 ウマ娘自動リセマラ周回を Python の [android-auto-play-opencv](https://github.com/noitaro/android-auto-play-opencv "android-auto-play-opencv") を使って実現させました。
 
 ## Readme
-https://noitalog.tokyo/python-umamusume/
+https://noitaro.github.io/python-umamusume/
 
 ## How to use
 [NoxPlayer](https://jp.bignox.com/ "NoxPlayer") が必要です。
@@ -37,7 +37,7 @@ GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにす�
 ```
 
 ### 複数端末リセマラ手順
-https://noitalog.tokyo/multi-startup/
+https://noitaro.github.io/multi-startup/
 
 ![](multi-startup.gif)
 ```Python
