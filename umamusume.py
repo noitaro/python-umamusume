@@ -4,6 +4,7 @@
 # pip install -U android-auto-play-opencv
 from android_auto_play_opencv import AapoManager
 import datetime
+import traceback
 
 # ↓複数デバイスを同時に操作したい場合、コメントを外す。
 #import inquirer  # pip install inquirer
@@ -499,3 +500,6 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         pass
+    except Exception:
+        print(traceback.format_exc())
+        input('エンターキーを押すと終了します。')
