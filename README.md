@@ -21,6 +21,8 @@ Python umamusume.py
 ```
 
 ### 修正履歴
++ 2023/12/16 データ連携ボタンの位置を修正
++ 2023/12/16 商品追加ダイアログを閉じるように修正
 + 2022/10/24 おさんぽチュートリアルに対応
 + 2022/01/01 2021年末～2022年始のイベント対応 : [@DenimPauel氏](https://github.com/DenimPauel)
 + 2021/12/8 楽曲取得に対応 : [@DenimPauel氏](https://github.com/DenimPauel)
@@ -28,13 +30,6 @@ Python umamusume.py
 + 2021/08/28 ハーフアニバーサリーに対応 : [@DenimPauel氏](https://github.com/DenimPauel)
 + 2021/06/20 複数端末に対応
 
-
-### 対象ガチャ変更手順
-GET_PRETTY_DARBY_GATYA で切り替える。
-```Python
-# ターゲットガチャの選択
-GET_PRETTY_DARBY_GATYA = True  # サポートガチャをターゲットにする場合は、Falseにする。
-```
 
 ### 複数端末リセマラ手順
 https://noitaro.github.io/multi-startup/
@@ -54,4 +49,10 @@ devicesselect = [
 ]
 selected = inquirer.prompt(devicesselect)
 aapo.adbl.setdevice(selected['device'])
+```
+
+### 仮想環境
+```Bash
+python -m venv env1
+pip install -r requirements.txt
 ```

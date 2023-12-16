@@ -4,6 +4,8 @@
 # pip install -U android-auto-play-opencv
 from android_auto_play_opencv import AapoManager
 import datetime
+
+# ↓複数デバイスを同時に操作したい場合、コメントを外す。
 #import inquirer  # pip install inquirer
 
 import os
@@ -14,10 +16,6 @@ adbpathCandidates = [
     'C:\\Program Files (x86)\\Nox\\bin\\',
     'D:\\Program Files\\Nox\\bin\\'
 ]
-
-# ターゲットガチャの選択
-# GET_PRETTY_DARBY_GATYAの利用は廃止、isMainTargetPrettyDarby を使う
-GATYA_PAGE_FEED_CW		= True  # 2022年10連ガチャx10対応:時計回りが吉。ダービー(ジュエル消費)=>サポートガチャ(フリー)で回る
 
 ROBY_STABLE = 5  # ロビー安定を判断する回数
 
@@ -51,10 +49,7 @@ def main():
 
     robyCount: int = 0  # ロビーカウンタ(変数の初期化)
 
-	# 2022年10連ガチャx10対応
-    gotThem = 0
     GATYA_INIT_SETTING_IS_PRETTYDARBY = True
-    isMainTargetPrettyDarby = GATYA_INIT_SETTING_IS_PRETTYDARBY
     
     # ↓複数デバイスを同時に操作したい場合、コメントを外す。
     #devicesselect = [
@@ -69,6 +64,8 @@ def main():
 
     # スタート
     start()
+
+    print('■■■ リセマラ 開始 ■■■')
 
     while True:
         # 画面キャプチャ
@@ -91,16 +88,19 @@ def main():
 
         # アカウント連携ダイアログが出たら、後でするボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/account.png'):
+            print('■■■ アカウント連携設定のお願い -> 後で ■■■')
             aapo.touchImg(file_path +'/umamusume/atode.png')
             aapo.sleep(1)
 
         # チュートリアルダイアログが出たら、スキップボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/tutorial.png'):
+            print('■■■ チュートリアル確認 -> スキップ ■■■')
             aapo.touchImg(file_path +'/umamusume/skip.png')
             aapo.sleep(1)
 
         # トレーナー登録ダイアログが出たら、
         elif aapo.chkImg(file_path +'/umamusume/trainer.png'):
+            print('■■■ トレーナー登録 開始 ■■■')
             # トレーナー名入力の位置をタップ
             aapo.touchPos(405, 430)
             aapo.sleep(1)
@@ -119,19 +119,23 @@ def main():
             # OKボタンの位置をタップ
             aapo.touchPos(405, 630)
             aapo.sleep(1)
+            print('■■■ トレーナー登録 終了 ■■■')
 
         # データダウンロードダイアログが出たら、OKボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/datadownload.png'):
+            print('■■■ データダウンロード -> OK ■■■')
             aapo.touchImg(file_path +'/umamusume/ok.png')
             aapo.sleep(1)
 
         # お知らせダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/osirase.png'):
+            print('■■■ お知らせ -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # おさんぽチュートリアルが出たら、次へボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/osanpo.png'):
+            print('■■■ おさんぽ 開始 ■■■')
             # 次へボタンの位置を3回タップ
             aapo.touchPos(270, 900)
             aapo.sleep(1)
@@ -139,67 +143,92 @@ def main():
             aapo.sleep(1)
             aapo.touchPos(270, 900)
             aapo.sleep(1)
+            print('■■■ おさんぽ 終了 ■■■')
 
         # 外部リンク確認
         elif aapo.chkImg(file_path +'/umamusume/gaibulink.png'):
+            print('■■■ 外部リンク確認 -> キャンセル ■■■')
             # キャンセルボタンをタップ
             aapo.touchImg(file_path +'/umamusume/cancel.png')
             aapo.sleep(1)
 
         # 交換確認
         elif aapo.chkImg(file_path +'/umamusume/koukankakunin.png'):
+            print('■■■ 交換確認 -> 閉じる ■■■')
             # 閉じるボタンをタップ
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
+        # 商品追加ダイアログが出たら、キャンセルボタンをタップ
+        elif aapo.chkImg(file_path +'/umamusume/syohin-tuika.png'):
+            print('■■■ 商品追加 -> キャンセル ■■■')
+            aapo.touchImg(file_path +'/umamusume/cancel.png')
+            aapo.sleep(1)
+
+        # ピックアップ選択ダイアログが出たら、キャンセルボタンをタップ
+        elif aapo.chkImg(file_path +'/umamusume/pickup-sentaku.png'):
+            print('■■■ ピックアップ選択 -> キャンセル ■■■')
+            aapo.touchImg(file_path +'/umamusume/cancel.png')
+            aapo.sleep(1)
+
         # メインストーリー開放ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/main-story.png'):
+            print('■■■ メインストーリー解放 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # ウマ娘ストーリー開放ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/umamusume-story.png'):
+            print('■■■ ウマ娘ストーリー解放 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # ウマ娘詳細ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/umamusume-syosai.png'):
+            print('■■■ ガチャ登場育成ウマ娘詳細 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # 楽曲獲得ダイアログが出たら、閉じるボタンをタップ
         elif aapo.chkImg(file_path +'/umamusume/gakkyoku.png'):
+            print('■■■ 楽曲取得 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # 日付が変わりましたが表示されたら、
         elif aapo.chkImg(file_path +'/umamusume/newday.png'):
+            print('■■■ 日付変更 -> OK ■■■')
             aapo.touchImg(file_path +'/umamusume/OK.png')
             aapo.sleep(1)
 
         # 受取完了ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg(file_path +'/umamusume/uketorikanryo.png'):
+            print('■■■ 受取完了 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # 衣装獲得ダイアログが出たら、閉じるの位置をタップ
         elif aapo.chkImg(file_path +'/umamusume/isyoget.png'):
+            print('■■■ 衣装獲得 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
         # ガチャストック通知が出たら、閉じるの位置をタップ
         elif aapo.chkImg(file_path +'/umamusume/gatyaStockNotification.png'):
+            print('■■■ ガチャストック通知 -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
             
         # プレゼントダイアログが出たら、一括受取の位置をタップ
         elif present_ok == False and aapo.chkImg(file_path +'/umamusume/present.png'):
+            print('■■■ プレゼント -> 一括受取 ■■■')
             aapo.touchImg(file_path +'/umamusume/ikkatuuketori1.png')
             present_ok = True
             aapo.sleep(1)
 
         # プレゼントを受け取った後で一括受取が押せなくなったら、閉じるの位置をタップ
         elif present_ok == True and aapo.chkImg(file_path +'/umamusume/ikkatuuketori2.png'):
+            print('■■■ プレゼント -> 閉じる ■■■')
             aapo.touchImg(file_path +'/umamusume/close.png')
             aapo.sleep(1)
 
@@ -209,11 +238,11 @@ def main():
             # お知らせが差し込まれる場合があるため、ロビーが安定するまで、robyStable回空ループさせる。
             robyCount += 1
             if robyCount < ROBY_STABLE:
-                print(f'ロビー待機: {robyCount}')
+                print(f'■ ロビー待機: {robyCount} -> プレゼント')
                 aapo.sleep(1)  # 小休止を入れる
                 continue
-            else:
-                robyCount = 0
+                
+            robyCount = 0
 
             # プレゼントの位置をタップ
             aapo.touchPos(490, 680)
@@ -225,17 +254,22 @@ def main():
             # 実績ログが終わるまで待機（メニューボタンが隠れて押せないから）
             robyCount += 1
             if robyCount < ROBY_STABLE:
-                print(f'ロビー待機: {robyCount}')
+                print(f'■ ロビー待機: {robyCount} -> データ連携')
                 aapo.sleep(1)  # 小休止を入れる
                 continue
-            else:
-                robyCount = 0
+
+            robyCount = 0
 
             # メニューボタンの位置をタップ
             aapo.touchPos(490, 50)
-            aapo.sleep(1)
+            aapo.sleep(2)
+
+            print('■■■ データ連携 開始 ■■■')
+
             # データ連携の位置をタップ1
-            aapo.touchPos(410, 640)
+            aapo.screencap()
+            aapo.sleep(1)
+            aapo.touchImg(file_path +'/umamusume/data-renkei.png')
             aapo.sleep(1)
             # データ連携の位置をタップ2
             aapo.touchPos(405, 640)
@@ -272,12 +306,16 @@ def main():
             aapo.sleep(1)
             # 画面キャプチャ
             aapo.screencap()
+
             # フォルダ名がカラの場合セット
-            if len(folderName) == 0:
-                folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            now_datatime_string = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            if len(folderName) == 0: folderName = now_datatime_string
+            
             # スクショを保存
-            aapo.imgSave('gatya/' + folderName + '/screenshot_' +
-                         datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
+            aapo.imgSave(f'gatya/{folderName}/screenshot_{now_datatime_string}.png')
+            
+            print('■■■ データ連携 終了 ■■■')
+
             aapo.sleep(1)
             # 閉じるの位置をタップ
             aapo.touchPos(270, 630)
@@ -293,42 +331,19 @@ def main():
 
         # ガチャを引く！
         elif aapo.touchImg(file_path +'/umamusume/gatyahiku.png'):
+            print('■■■ ガチャを引く ■■■')
             # タップ出来たら待機
             aapo.sleep(1)
 
-        # ガチャ結果
-        elif aapo.chkImg(file_path +'/umamusume/gatya-kekka.png'):
-            # フォルダ名がカラの場合セット
-            if len(folderName) == 0:
-                folderName = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
-            # スクショを保存
-            aapo.screencap()  # スクリーンリフレッシュ（写真が取れない場合がある。ボタン押下時のタイマーよりここのほうが確実な気がする。)
-            aapo.imgSave('gatya/' + folderName + '/screenshot_' +
-                         datetime.datetime.now().strftime('%Y%m%d%H%M%S') + '.png')
+        # もう1回引くボタンをタップ
+        elif aapo.touchImg(file_path +'/umamusume/pickagain.png'):
+            print('■■■ もう一回引く ■■■')
+            # タップ出来たら待機
             aapo.sleep(1)
-
-            # もう1回引くボタンをタップ
-            if aapo.touchImg(file_path +'/umamusume/pickagain.png'):
-                aapo.sleep(1)
-            # または、OKボタンをタップ（無料ガチャのケース）
-            elif aapo.touchImg(file_path +'/umamusume/ok.png'):
-                aapo.sleep(1)
 
         # 購入するボタンが出たら、ガチャ終了
         elif aapo.chkImg(file_path +'/umamusume/konyusuru.png'):
-
-			# 2022年10連ガチャx10対応
-            gotThem += 1
-            if gotThem < 2:
-                isMainTargetPrettyDarby = not bool(isMainTargetPrettyDarby)
-                aapo.touchImg(file_path +'/umamusume/cancel.png')
-                aapo.sleep(1)
-                aapo.touchPos(150, 900) #戻るボタンの座標を押す
-                aapo.sleep(1)
-                continue
-            #終了処理
-            gotThem = 0
-            isMainTargetPrettyDarby = GATYA_INIT_SETTING_IS_PRETTYDARBY
+            print('■■■ リセマラ 終了 ■■■')
 
             # リセット
             reset()
@@ -341,29 +356,36 @@ def main():
             robyCount = 0
             present_ok = False
 
-        # 左上ピンクのガチャタイトルが出たら、対象ガチャのページに移動、10連ガチャボタンを表示させる
-        elif aapo.chkImg(file_path +'/umamusume/gatyaselected.png'):
-            if isMainTargetPrettyDarby:	# 2022年10連ガチャx10対応 GET_PRETTY_DARBY_GATYAの利用は廃止
-                found = aapo.chkImg(file_path +'/umamusume/gatyaprettydarby.png')
-            else:
-                found = aapo.chkImg(file_path +'/umamusume/gatyasupportcard.png')
+        # ガチャ結果
+        elif aapo.chkImg(file_path +'/umamusume/gatya-kekka.png'):
 
-            if found:
-                # 10回引く！
-                aapo.touchImg(file_path +'/umamusume/10-kaihiku.png')
-            else:
-                # 次のページへ
-                if GATYA_PAGE_FEED_CW:
-                    aapo.touchPos(460, 580)    # > 右周り
-                else:
-                    aapo.touchPos(80, 580)    # < 左周り
+            # フォルダ名がカラの場合セット
+            now_datatime_string = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            if len(folderName) == 0: folderName = now_datatime_string
 
+            # スクショを保存
             aapo.sleep(1)
+            aapo.screencap()  # スクリーンリフレッシュ（写真が取れない場合がある。ボタン押下時のタイマーよりここのほうが確実な気がする。)
+            aapo.imgSave(f'gatya/{folderName}/screenshot_{now_datatime_string}.png')
+            aapo.sleep(2)
+
+        # 左上にピンクガチャタイトルが出た時
+        elif aapo.chkImg(file_path +'/umamusume/gatyaselected.png'):
+
+            # 無償の10回引くボタンがあるか？
+            if aapo.touchImg(file_path +'/umamusume/10-kaihiku.png'):
+                aapo.sleep(1)
+            else:
+                # 無ければ、次のページへ
+                aapo.touchPos(460, 580)
+                aapo.sleep(1)
 
         # モードが0(リセット)の場合
         elif mode == 0:
             # ハンバーガーメニューボタンをタップ
             if aapo.touchImg(file_path +'/umamusume/hanba-ga-menu.png'):
+                print('■■■ ユーザーデータ削除 開始 ■■■')
+
                 # タップ出来たら待機
                 aapo.sleep(1)
                 # ユーザーデータ削除の位置をタップ1
@@ -375,6 +397,9 @@ def main():
                 # ユーザーデータ削除の位置をタップ3
                 aapo.touchPos(405, 630)
                 aapo.sleep(1)
+
+                print('■■■ ユーザーデータ削除 終了 ■■■')
+
                 # 閉じるの位置をタップ
                 aapo.touchPos(270, 630)
                 aapo.sleep(1)
@@ -394,7 +419,8 @@ def main():
                 aapo.sleep(1)
 
         # スタック対策 起動後STARTが表示されない、アンドロイド画面(アプリが落ちた場合)
-        if aapo.chkImg(file_path +'/umamusume/stack.png') or aapo.chkImg(file_path +'/umamusume/umamusumegameicon.png'):
+        if aapo.chkImg(file_path +'/umamusume/stack.png') or \
+        aapo.chkImg(file_path +'/umamusume/umamusumegameicon.png'):
             print(f'スタック: {stackCount}')
             aapo.sleep(1)
             stackCount = stackCount + 1
@@ -422,6 +448,8 @@ def start():
 
 
 def reset():
+    print('■■■ キャッシュ削除 開始 ■■■')
+
     # ホームキーを押す
     aapo.inputkeyevent(3)
     aapo.sleep(1)
@@ -460,6 +488,8 @@ def reset():
         # すべて消去の位置をタップ
         aapo.touchPos(700, 55)
         aapo.sleep(1)
+
+    print('■■■ キャッシュ削除 終了 ■■■')
 
     return
 
