@@ -17,20 +17,7 @@ NoxPlayer の画面解像度を 960×540 に設定する。
 Python umamusume.py
 ```
 
-### 修正履歴
-+ 2023/12/16 データ連携ボタンの位置を修正
-+ 2023/12/16 商品追加ダイアログを閉じるように修正
-+ 2022/10/24 おさんぽチュートリアルに対応
-+ 2022/01/01 2021年末～2022年始のイベント対応 : [@DenimPauel氏](https://github.com/DenimPauel)
-+ 2021/12/8 楽曲取得に対応 : [@DenimPauel氏](https://github.com/DenimPauel)
-+ 2021/11/21 日付をまたいだリセマラに対応 : [@DenimPauel氏](https://github.com/DenimPauel)
-+ 2021/08/28 ハーフアニバーサリーに対応 : [@DenimPauel氏](https://github.com/DenimPauel)
-+ 2021/06/20 複数端末に対応
-
-
 ### 複数端末リセマラ手順
-https://noitaro.github.io/multi-startup/
-
 ![](multi-startup.gif)
 ```Python
 # ↓複数デバイスを同時に操作したい場合、コメントを外す。
